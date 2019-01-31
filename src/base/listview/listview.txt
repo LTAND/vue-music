@@ -1,0 +1,5 @@
+1.设置组件BScorll 自定义滚动事件scroll 监听scrollY 派发事件的频率probeType
+2.渲染页面后，计算滚动区域的高度
+3.根据高度的区间，获取currentIndex
+
+

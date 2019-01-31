@@ -1,0 +1,7 @@
+父元素不定宽
+
+margin-top: (($m-header-height - $logo-height) / 2);  // 微调上下距离
+
+
+display: inline-block
+vertical-align top // 控制元素上下对齐

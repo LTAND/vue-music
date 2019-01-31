@@ -1,0 +1,22 @@
+确保外层比内层高度小
+slot 得到是要滚动的元素
+
+<div class="wrapper">
+  <scroll class='content' :data="singer">
+    <div>
+      <div>{{singer}}</div>
+    </div>
+  </scroll>
+</div>
+
+<style>
+  .wrapper
+    position: fixed
+    width:100%
+    top: 不遮盖导航栏的高度
+    bottom:0
+    .content
+      position: relative
+      height: 100%
+      overflow: hidden
+</style>
