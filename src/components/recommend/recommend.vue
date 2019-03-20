@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div class="recommend" ref="recommend">
     <scroll ref="scroll" :data="discList" class="recommed-content">
       <div>
         <!-- div为了将slider组件包含一起垂直滚动 -->
@@ -16,7 +16,7 @@
         <div class="recommed-list">
           <div class="list-title">热门歌单推荐</div>
           <ul class="disc-list">
-            <li class="item" v-for="item in discList" :key="item.id">
+            <li @click="selelctItem(item)" class="item" v-for="item in discList" :key="item.id">
               <div class="item-icon">
                 <img v-lazy="item.imgurl">
               </div>
@@ -32,6 +32,7 @@
         <loading></loading>
       </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -41,7 +42,11 @@ import { ERR_OK } from "api/config";
 import Slider from "base/slider/slider";
 import Scroll from "base/scroll/scroll";
 import Loading from "base/loading/loading";
+import { playlistMixin } from "common/js/mixin";
+import { mapMutations } from 'vuex'
+
 export default {
+  mixins: [playlistMixin],
   data() {
     return {
       slider: [],
@@ -52,14 +57,25 @@ export default {
     this._getRecommend();
     this._getDiscList();
     // setTimeout(() => {
-    // }, 10000);
+    //   console.log(this.$refs);
+    // }, 1000);
   },
   methods: {
+    selelctItem(item){
+      this.$router.push({name:"disc",params: {id: item.dissid}})
+      console.log(item)
+      this.setDisc(item)
+    },
+    handlePlayList(playList) {
+      const bottom = playList.length > 0 ? "60px" : "";
+      this.$refs.recommend.style.bottom = bottom;
+      this.$refs.scroll.refresh();
+    },
     _getRecommend() {
       getRecommend().then(res => {
         if (res.code === ERR_OK) {
           // banner图片数据
-          this.slider = res.data.slider;
+          this.slider = res.data.slider;         
         }
       });
     },
@@ -77,7 +93,10 @@ export default {
         this.$refs.scroll.refresh();
         this.checkloaded = true;
       }
-    }
+    },
+    ...mapMutations({
+      setDisc: 'SET_DISC'
+    })
   },
   components: {
     Slider,
@@ -107,7 +126,7 @@ export default {
     .loader-wrapper
       position: absolute
       width: 100%
-      top: 30%
+      top: 50%
       transform: translateY(-50%) // 垂直居中对齐
     .slider-wrapper
       // position relative

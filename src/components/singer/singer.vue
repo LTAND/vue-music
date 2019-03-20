@@ -1,6 +1,6 @@
 <template>
-  <div class="singer">
-    <list-view @select="selectSinger" :singers="singers"></list-view>
+  <div class="singer" ref="singer">
+    <list-view @select="selectSinger" :singers="singers" ref="list"></list-view>
     <!-- 二级歌手详情router -->
     <router-view></router-view>
   </div>
@@ -12,10 +12,12 @@ import { ERR_OK } from "api/config";
 import Singer from "common/js/singer.js";
 import ListView from "base/listview/listview";
 import { mapMutations } from "vuex";
+// import { playlistMixin } from "common/js/mixin.js";
 const HOT_NUM = 10;
 const HOT_NAME = "热门";
 
 export default {
+  // mixins: [playlistMixin],
   data() {
     return {
       singers: []
@@ -23,11 +25,19 @@ export default {
   },
   created() {
     this._getSingerList();
+    //   setTimeout(() => {
+    //   console.log("无$el",this.$refs.singer.style);
+    // }, 1000);
   },
   components: {
     ListView
   },
   methods: {
+    handlePlayList(playList) {
+      const bottom = playList.length > 0 ? "60px" : "";
+      this.$refs.singer.$el.style.bottom = bottom;
+      this.$refs.list.refresh();
+    },
     selectSinger(singer) {
       // console.log(singer)
       // 等同于this.$router.push({ path: `/singer/${singer.id}` });

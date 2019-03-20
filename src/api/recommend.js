@@ -15,6 +15,7 @@ export function getRecommend() {
 }
 
 export function getDiscList() {
+  // 后端代理
   const url = '/api/getDiscList'
   const data = Object.assign({}, commonParams, {
     // 歌单后端代理请求，data -- query(webpack.dev.conf.js)
@@ -31,6 +32,25 @@ export function getDiscList() {
     format: 'json' // 得到json格式
   })
 
-  return axios.get(url, { params: data })
-    .then((res) => { return Promise.resolve(res.data) })
+  return axios.get(url, { params: data }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+export function getSongList(disstid) {
+  // 后端代理
+  const url = 'api/getSongList'
+  const data = Object.assign({}, commonParams, {
+    disstid,
+    type: 1,
+    json: 1,
+    utf8: 1,
+    onlysong: 0,
+    platform: 'yqq',
+    hostUin: 0,
+    needNewCode: 0
+  })
+  return axios.get(url, {params: data}).then(res => {
+    return Promise.resolve(res.data)
+  })
 }

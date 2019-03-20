@@ -71,7 +71,8 @@ export default {
           me.$emit("scroll", pos);
         });
       }
-      // console.log(this.scroll);
+      // console.log("data",this.data,this.scroll);
+      // console.log("=============================");
       // hasVerticalScroll：true
       // 垂直滚动条件：scrollerHeight > wrapperHeight
     },

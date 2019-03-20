@@ -65,14 +65,15 @@ export default {
 <style lang='stylus' scoped rel='stylesheet/stylus'>
 @import '~common/stylus/variable'
 
-// .singer-detail
-//   width: 100%
-  // height: 100%
-  // text-align: center
-  // position: fixed
-  // top: 0
-  // left: 0
-  // background-color: $color-background
+.singer-detail
+  width: 100%
+  height: 100%
+  text-align: center
+  position: fixed
+  top: 0
+  left: 0
+  z-index 200
+  background-color: $color-background
 .slide-enter-active, .slide-leave-active
   transition: all 0.3s
 .slide-enter, .slide-leave-to

@@ -1,6 +1,7 @@
 {
   "name": "vue-music",
   "version": "1.0.0",
+  "homepage": "https://ltand.github.io/vue-music",
   "description": "mk音乐播放器",
   "author": "",
   "private": true,
@@ -8,11 +9,14 @@
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "axios": "^0.18.0",
     "better-scroll": "^1.13.2",
+    "lyric-parser": "^1.0.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
@@ -31,6 +35,7 @@
     "babel-runtime": "^6.26.0",
     "chalk": "^2.0.1",
     "copy-webpack-plugin": "^4.0.1",
+    "create-keyframe-animation": "^0.1.0",
     "css-loader": "^0.28.11",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
@@ -45,6 +50,7 @@
     "fastclick": "^1.0.6",
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
+    "gh-pages": "^2.0.1",
     "html-webpack-plugin": "^2.30.1",
     "jsonp": "^0.2.1",
     "node-notifier": "^5.1.2",

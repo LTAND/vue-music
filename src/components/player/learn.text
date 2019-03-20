@@ -1,0 +1,21 @@
+&.normal-enter-active, &.normal-leave-active
+  transition:all 0.4s
+  .top, .bottom
+    transition: all 0.4s cubic-bezier(0.86, 0.18, 0.82, 1.32) // 掉落感
+&.normal-enter, &.normal-leave-to
+  opacity: 0
+  // 起始位置
+  .top
+    transform: translate3d(0, -100px, 0)
+  .bottom
+    transform: translate3d(0, -100px, 0)
+
+
+
+多个图标切换:
+状态标记0,1,2,3 = sq,loop,random
+不同图标执行动作 => watch:{ 状态标记 }
+
+@click.stop 阻止点击冒泡,
+div.box @click 
+  div.box @click 会触发外层

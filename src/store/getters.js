@@ -10,3 +10,4 @@ export const currentSong = (state) => {
   // 找不到歌曲为空
   return state.playList[state.currentIndex] || {}
 }
+export const disc = state => state.disc

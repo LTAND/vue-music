@@ -58,6 +58,7 @@ import { getData } from "common/js/dom.js";
 
 const ANCHOR_HEIGHT = 18; // .list-shortcut > .item 的高度（包含字体，用浏览器观测得到）
 const TITLE_HEIGHT = 30; // .fixed-title 的高度
+
 export default {
   props: {
     singers: {
