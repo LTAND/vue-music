@@ -246,7 +246,7 @@ export default {
   .list-shortcut
     position: absolute
     top: 10%
-    right: 2.5%
+    right: 0.5%
     background-color: $color-background-d
     padding: 20px 0
     border-radius: 10px

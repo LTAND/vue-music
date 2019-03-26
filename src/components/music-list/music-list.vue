@@ -23,7 +23,7 @@
       ref="list"
     >
       <div class="song-list-wrapper">
-        <song-list @select="selectItem" :songs="songs"></song-list>
+        <song-list @select="selectItem" :songs="songs" :rank="rank"></song-list>
       </div>
     </scroll>
     <div class="loader-wrapper" v-show="!songs.length">
@@ -55,6 +55,10 @@ export default {
     songs: {
       type: Array,
       default: null
+    },
+    rank: {
+      type: Boolean,
+      default: false
     }
   },
   created() {
@@ -85,9 +89,7 @@ export default {
     scrollY(newY) {
       let translateY = Math.max(this.minTranslateY, newY);
       this.$refs.layer.style["transform"] = `translate3d(0,${translateY}px,0)`;
-      this.$refs.layer.style[
-        "webkitTransform"
-      ] = `translate3d(0,${translateY}px,0)`;
+      this.$refs.layer.style["webkitTransform"] = `translate3d(0,${translateY}px,0)`;
       // console.log(translateY);
     }
   },
