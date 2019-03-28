@@ -60,7 +60,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           },
           params: req.query
         }).then(response => { res.json(response.data) }).catch(e => { console.log(e) })
-      }),
+      })
+
       app.get('/api/getSingerList', function (req, res) {
         var url = 'https://u.y.qq.com/cgi-bin/musicu.fcg' // 原api
         axios.get(url, {
@@ -70,19 +71,19 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           },
           params: req.query
         }).then(response => { res.json(response.data) }).catch(e => { console.log(e) })
-      }),
+      })
 
 
-      app.get('/api/lyric', function(req, res){
+      app.get('/api/lyric', function (req, res) {
         // var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_tyric_new.fcg' // 原api
         var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
-        axios.get(url,{
-          headers:{
-            referer:'https://c.y.qq.com/',
-            host:'c.y.qq.com'
+        axios.get(url, {
+          headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
           },
           params: req.query
-        }).then((response)=>{
+        }).then((response) => {
           let ret = response.data
           if (typeof ret === 'string') {
             let reg = /^\w+\(({[^()]+})\)$/
@@ -92,7 +93,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             }
           }
           res.json(ret)
-        }).catch((e)=>{
+        }).catch((e) => {
           console.log('==========server lyric=========')
           console.log(e)
         })
@@ -111,7 +112,32 @@ const devWebpackConfig = merge(baseWebpackConfig, {
           if (typeof ret === 'string') {
             // var reg = /^\w+\(({[^()]+})\)$/
             var reg = /{.*}/
-            var matches = ret.match(reg)           
+            var matches = ret.match(reg)
+            if (matches) {
+              ret = JSON.parse(matches[0])
+            }
+          }
+          res.json(ret)
+        }).catch((e) => {
+          console.log(e)
+        })
+      })
+
+      app.get('/api/search', function (req, res) { // 搜索内容
+        var url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
+        axios.get(url, {
+          headers: {
+            referer: 'https://y.qq.com/',
+            host: 'y.qq.com'
+          },
+          params: req.query
+        }).then((response) => {
+          var ret = response.data
+          // 处理"callback({code:1.....})""
+          if (typeof ret === 'string') {
+            // var reg = /^\w+\(({[^()]+})\)$/
+            var reg = /{.*}/
+            var matches = ret.match(reg)
             if (matches) {
               ret = JSON.parse(matches[0])
             }

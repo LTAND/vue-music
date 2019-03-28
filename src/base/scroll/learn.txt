@@ -11,8 +11,8 @@ slot 得到是要滚动的元素
 
 <style>
   .wrapper
-    position: fixed
     width:100%
+    position: fixed
     top: 不遮盖导航栏的高度
     bottom:0
     .content

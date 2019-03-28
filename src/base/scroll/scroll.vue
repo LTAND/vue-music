@@ -40,6 +40,11 @@ export default {
     listenScroll: {
       type: Boolean,
       default: false
+    },
+    pullup:{
+      // 下拉刷新
+      type: Boolean,
+      default: false
     }
   },
   watch: {
@@ -70,6 +75,14 @@ export default {
         this.scroll.on("scroll", pos => {
           me.$emit("scroll", pos);
         });
+      }
+
+      if(this.pullup){
+        this.scroll.on('scrollEnd',()=>{
+          if(this.scroll.y <= this.scroll.maxScrollY+50){
+            this.$emit("scrollToEnd")
+          }
+        })
       }
       // console.log("data",this.data,this.scroll);
       // console.log("=============================");

@@ -31,7 +31,7 @@ import { getTopList } from 'api/rank.js'
 import { ERR_OK } from 'api/config.js'
 import Scroll from 'base/scroll/scroll'
 import Loading from "base/loading/loading";
-import { mapMutations } from  'vuex';
+import { mapMutations } from 'vuex';
 export default {
   data() {
     return {
