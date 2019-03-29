@@ -111,7 +111,7 @@ export default {
 .recommend
   // 滚动样式
   width: 100%
-  position: fixed
+  position: fixed // 固定视口不动
   top: 96px
   bottom: 0
   // 滚动样式

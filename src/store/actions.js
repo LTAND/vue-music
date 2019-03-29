@@ -34,3 +34,22 @@ export const randomPlay = function ({ commit }, { list }) {
   commit(types.SET_CURRENT_INDEX, 0)
   commit(types.SET_PLAYING_STATE, true)
 }
+
+// 在search中点击插入一首歌
+// 20190329
+// export const insertSong = function({ commit, state}, song) {
+//   let playList = state.playList
+//   let sequenceList = state.sequenceList
+//   let currentIndex = state.currentIndex
+//   // 记录当前歌曲
+//   let currentSong = playList[currentIndex]
+
+//   currentIndex++
+
+//   let fpIndex = findIndex(playList, song)
+//   if (fpIndex > -1) {
+
+//   }else {
+
+//   }
+// }

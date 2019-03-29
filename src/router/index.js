@@ -7,7 +7,6 @@ import Rank from 'components/rank/rank'
 import Search from 'components/search/search'
 import Disc from 'components/disc/disc'
 import TopList from 'components/top-list/top-list'
-
 Vue.use(Router)
 
 export default new Router({
@@ -55,7 +54,14 @@ export default new Router({
     {
       name: 'search',
       path: '/search',
-      component: Search
+      component: Search,
+      children: [
+        {
+          name: 'singerdetail',
+          path: ':id',
+          component: SingerDetail
+        }
+      ]
     }
   ]
 })

@@ -7,7 +7,7 @@
         <span @click="addQuery(key.k)" v-for="key in hotKey" :key="key.id">{{key.k}}</span>
       </div>
     </div>
-    <suggest v-show="query" :query="query"></suggest>
+    <suggest class="suggest" v-show="query" :query="query"></suggest>
   </div>
 </template>
 
@@ -48,7 +48,6 @@ export default {
       })
     }
   }
-
 };
 </script>
 <style lang='stylus' scoped rel='stylesheet/stylus'>
@@ -73,5 +72,5 @@ export default {
         border-radius: 6px 
         color: $color-text-d
         background: $color-hightLight-background
-        margin:0 20px 10px 0       
+        margin: 0 20px 10px 0
 </style>
