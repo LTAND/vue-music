@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import debounce from "common/js/util.js";
+import { debounce } from "common/js/util.js";
 export default {
   props: {
     placeholder: {
@@ -31,21 +31,19 @@ export default {
       this.query = "";
     },
     blur() {
-      this.refs.query.blur();
+      this.$refs.query.blur();
     },
     setQuery(query) {
       this.query = query;
     }
   },
   created() {
-    this.$watch("query", (newQuery)=>{
-      //实时监听并派发
-      this.$emit("query", newQuery)
-    })
-    // this.$watch("query",debounce(newQuery => {
-    //     this.$emit(query, newQuery);
-    //   }, 200)
-    // );
+    // debounce - 节流函数
+    this.$watch("query", debounce(newQuery=>{
+      // 实时监听并派发
+        this.$emit("query", newQuery)
+      }, 500)
+    )
   }
 };
 </script>

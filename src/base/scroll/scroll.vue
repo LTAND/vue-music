@@ -42,7 +42,12 @@ export default {
       default: false
     },
     pullup:{
-      // 下拉刷新
+      // 上拉刷新, 派发scrollToEnd事件
+      type: Boolean,
+      default: false
+    },
+    beforeScroll: {
+      // 滚动，派发beforeScroll事件
       type: Boolean,
       default: false
     }
@@ -82,6 +87,12 @@ export default {
           if(this.scroll.y <= this.scroll.maxScrollY+50){
             this.$emit("scrollToEnd")
           }
+        })
+      }
+
+      if(this.beforeScroll){
+        this.scroll.on('beforeScrollStart',()=>{
+          this.$emit('beforeScroll')
         })
       }
       // console.log("data",this.data,this.scroll);

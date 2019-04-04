@@ -1,4 +1,5 @@
 import * as types from './mutation-types'
+//  修改state.js的数据
 const mutations = {
   [types.SET_SINGER](state, singer) {
     state.singer = singer
@@ -26,6 +27,9 @@ const mutations = {
   },
   [types.SET_TOP_LIST](state, toplist) {
     state.topList = toplist
+  },
+  [types.SET_SEARCH_HISTORY](state, history) {
+    state.searcHistory = history
   }
 }
 export default mutations

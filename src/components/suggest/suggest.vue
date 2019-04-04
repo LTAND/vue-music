@@ -1,15 +1,23 @@
 <template>
   <div class="suggest">
-    <srocll class="suggest-content" ref="SuggestContent" :data="result" :pullup="pullup" @scrollToEnd="searchMore">
+    <srocll
+      class="suggest-content"
+      ref="SuggestContent"
+      :data="result"
+      :pullup="pullup"
+      :beforeScroll="beforeScroll"
+      @beforeScroll="listScroll"
+      @scrollToEnd="searchMore"
+    >
       <ul class="suggest-list">
-        <li class="suggest-item" @click="selectSinger(item)" v-for="item in result" :key="item.id">
+        <li class="suggest-item" @click="selectSuggest(item)" v-for="item in result" :key="item.id">
           <div class="name">
             <i class="iconfont icon-time"></i>
             <p class="text">{{nameText(item)}}</p>
           </div>
         </li>
         <div class="result-tip">
-          <loading class="laoding" v-show="hasMore" title=""></loading>
+          <loading class="laoding" v-show="hasMore" title></loading>
           <div v-show="!hasMore && !result.length">抱歉，暂时无搜素结果</div>
         </div>
       </ul>
@@ -22,13 +30,13 @@
 import { search } from "api/search.js";
 import { ERR_OK } from "api/config.js";
 import { createSong } from "common/js/song";
-import Singer from 'common/js/singer'
-import { mapMutations, mapGetters } from 'vuex'
+import Singer from "common/js/singer";
+import { mapActions, mapMutations, mapGetters } from "vuex";
 import Loading from "base/loading/loading";
 import Srocll from "base/scroll/scroll";
 
 const TYPE_SINGER = "singer";
-const perpage = 20;   // 改变每一页搜索个数
+const perpage = 20; // 改变每一页搜索个数
 export default {
   props: {
     query: {
@@ -38,17 +46,15 @@ export default {
     showSinger: {
       type: Boolean,
       default: true
-    },
-    pullup: {
-      type: Boolean,
-      default: true // 派发scrollToEnd事件
     }
   },
   data() {
     return {
       page: 1,
       result: [],
-      hasMore: true
+      hasMore: true,
+      pullup:true,        // 派发scrollToEnd事件
+      beforeScroll: true  // 派发beforeScroll事件
     };
   },
   components: {
@@ -57,15 +63,19 @@ export default {
   },
   computed: {},
   methods: {
-    selectSinger(item){
-      if(item.type === TYPE_SINGER){
+    selectSuggest(item) {
+      // 点击选择搜素结果中有歌曲或歌手
+      if (item.type === TYPE_SINGER) {
         const singer = new Singer({
           id: item.singermid,
           name: item.singername
-        })
+        });
         this.$router.push({ name: "singerdetail", params: { id: singer.id } });
-        this.setSinger(singer)
+        this.setSinger(singer);
+      } else {
+        this.insertSong(item);
       }
+      this.$emit('select') // 派发处理搜素历史
     },
     nameText(item) {
       if (item.type === TYPE_SINGER) {
@@ -76,18 +86,17 @@ export default {
     },
     _search() {
       // 每次重新搜索前,重置数据
-      this.page = 1
-      this.hasMore = true
-      this.$refs.SuggestContent.scrollTo(0, 0)
+      this.page = 1;
+      this.hasMore = true;
+      this.$refs.SuggestContent.scrollTo(0, 0);
 
       // 搜索接口请求
       search(this.query, this.page, this.showSinger, perpage).then(res => {
         if (res.code === ERR_OK) {
           this.result = this._genResult(res.data);
           this.hasMore = this._checkMore(res.data);
-
-          console.log("res", res.data);
-          console.log("result", this.result);
+          // console.log("res", res.data);
+          // console.log("result", this.result);
         }
       });
     },
@@ -102,6 +111,9 @@ export default {
           this.hasMore = this._checkMore(res.data);
         }
       });
+    },
+    listScroll(){
+      this.$emit("listScroll")
     },
     _checkMore(data) {
       const song = data.song;
@@ -139,7 +151,8 @@ export default {
     },
     ...mapMutations({
       setSinger: "SET_SINGER"
-    })
+    }),
+    ...mapActions(["insertSong"])
   },
   watch: {
     query() {

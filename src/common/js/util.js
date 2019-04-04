@@ -16,13 +16,12 @@ export function shuffle(arr) {
 export function debounce(func, delay) {
   // search-box
   let timer
-
   return function (...args) {
     if (timer) {
       clearTimeout(timer)
     }
     timer = setTimeout(() => {
-      func.apply(this, args)
+      func.apply(this, args) // 自己调用func
     }, delay)
   }
 }
