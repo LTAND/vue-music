@@ -27,7 +27,7 @@ function deleteFromArray(arr, compare) {
 }
 
 export function saveSearch(query) {
-  let searches = storage.get(SEARCH_KEY, []) // 获取
+  let searches = storage.get(SEARCH_KEY, []) // 获取，获取不到，初始值为[]
   insertArry(searches, query, item => { return item === query }, SEARCH_MAX_LEN) // 插入
   storage.set(SEARCH_KEY, searches) // 提交保存
   return searches

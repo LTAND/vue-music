@@ -1,20 +1,22 @@
 <template>
   <div class="search" ref="search">
     <search-box ref="SearchBox" @query="onQueryChange"></search-box>
-    <div class="hot-key" v-show="!query">
-      <div class="title">热门搜索</div>
-      <div class="content">
-        <span @click="addQuery(key.k)" v-for="key in hotKey" :key="key.id">{{key.k}}</span>
-      </div>
-    </div>
-    <div class="search-history" v-show="history.length">
-      <span class="title">历史记录</span>
-      <ul class="content">
-        <li v-for="item in history" :key="item.id">
-          <span>{{item}}</span>
-          <span @click="deleteSearcHistory(item)"><i class="iconfont icon-close"></i></span>
-        </li>
-      </ul>
+    <div class="shortcut-wrapper" ref="shortcutWrapper" v-show="!query">
+      <scroll class="shortcut" ref="shortcut" :data="shortcut">
+        <div>
+          <div class="hot-key" v-show="!query">
+            <div class="title">热门搜索</div>
+            <div class="content">
+              <span @click="addQuery(key.k)" v-for="key in hotKey" :key="key.id">{{key.k}}</span>
+            </div>
+          </div>
+          <search-list
+            :searcHistory="searcHistory"
+            @clear="openWindowClear"
+            @delete="deleteHistory"
+          ></search-list>
+        </div>
+      </scroll>
     </div>
     <suggest
       @select="savaSearch"
@@ -24,6 +26,13 @@
       v-show="query"
       :query="query"
     ></suggest>
+    <confirm
+      ref="Confirm"
+      @confirm="clearSearcHistory"
+      @cancel="closeWindowClear"
+      title="是否清空所有搜索历史记录"
+      confirmBtnText="清空"
+    ></confirm>
   </div>
 </template>
 
@@ -34,40 +43,67 @@ import { createSong } from "common/js/song.js";
 import { getHotKey, search } from "api/search.js";
 import { ERR_OK } from "api/config.js";
 import { playlistMixin } from "common/js/mixin.js";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
+import SearchList from "base/search-list/search-list";
+import Confirm from "base/confirm/confirm";
+import Scroll from "base/scroll/scroll";
 
 export default {
   mixins: [playlistMixin],
   data() {
     return {
       hotKey: [],
-      query: ""
+      query: "",
+      isClear: false
     };
+  },
+  watch: {
+    query(newQuery) {
+      if (!newQuery) {
+        setTimeout(() => {
+            this.$refs.shortcut.refresh();
+        }, 20);
+      }
+    }
   },
   components: {
     SearchBox,
-    Suggest
+    Suggest,
+    SearchList,
+    Confirm,
+    Scroll
   },
   created() {
     this._getHotKey();
   },
   computed: {
-    history(){
-      return this.searcHistory()
-    }
+    shortcut() {
+      return this.hotKey.concat(this.searcHistory);
+    },
+    ...mapGetters(["searcHistory"])
   },
   methods: {
-    deleteSearcHistory(item){
+    savaSearch(){
+      this.savaSearcHistory(this.query)
+    },
+    deleteHistory(item){
       this.deleteSearcHistory(item)
     },
-    savaSearch() {
-      this.savaSearcHistory(this.query);
+    openWindowClear() {
+      this.$refs.Confirm.show()
+    },
+    closeWindowClear() {
+      this.$refs.Confirm.hide()
     },
     handlePlayList(playList) {
       // 留出播放器的高度
       const bottom = playList.length > 0 ? "60px" : 0;
+
       this.$refs.search.style.bottom = bottom;
-      this.$refs.suggest.$refs.SuggestContent.refresh();
+      this.$refs.suggest.$refs.SuggestContent.refresh(); // srcoll组件刷新
+
+      this.$refs.shortcutWrapper.style.bottom = bottom;
+      this.$refs.shortcut.refresh(); // srcoll组件刷新
     },
     onQueryChange(newQuery) {
       this.query = newQuery;
@@ -85,9 +121,9 @@ export default {
         }
       });
     },
-    ...mapGetters([
-      "searcHistory"
-    ]),
+    ...mapMutations({
+      setSearchHistory: "SET_SEARCH_HISTORY"
+    }),
     ...mapActions([
       "savaSearcHistory",
       "deleteSearcHistory",
@@ -101,44 +137,34 @@ export default {
 
 .search
   padding: 20px 20px 0 20px
-  .hot-key
-    display: flex
-    margin-top: 20px
-    flex-flow: column
-    .title
-      flex: 1 1 auto
-      margin-bottom: 20px
-      font-size: $font-size-medium
-      color: $color-text-l
-    .content
-      flex: 1 1 auto
-      span
-        display: inline-block
-        font-size: 14px
-        padding: 3px 9px
-        border-radius: 6px
-        color: $color-text-d
-        background: $color-hightLight-background
-        margin: 0 20px 10px 0
-  .search-history
-    display: flex
-    margin-top: 20px
-    flex-flow: column
-    .title
-      flex: 1 1 auto
-      margin-bottom: 20px
-      font-size: $font-size-medium
-      color: $color-text-l
-    .content
-      flex: 1 1 auto
-      list-style: none
-      padding-left: 0 
-      li
-        justify-content flex-end
-        flex 1 1 auto
-        align-items: center 
-        span
-          display: inline-block
-          font-size: 14px
-          color: $color-text-d
+  .shortcut-wrapper
+    width: 100%
+    position: fixed
+    top: 178px
+    left: 0
+    right: 0
+    bottom: 0
+    .shortcut
+      padding: 0 20px 0 20px
+      height: 100%
+      overflow: hidden
+      .hot-key
+        display: flex
+        margin-top: 20px
+        flex-flow: column
+        .title
+          flex: 1 1 auto
+          margin-bottom: 20px
+          font-size: $font-size-medium
+          color: $color-text-l
+        .content
+          flex: 1 1 auto
+          span
+            display: inline-block
+            font-size: 14px
+            padding: 3px 9px
+            border-radius: 6px
+            color: $color-text-d
+            background: $color-hightLight-background
+            margin: 0 20px 10px 0
 </style>

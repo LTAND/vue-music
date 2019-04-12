@@ -35,7 +35,6 @@
 <script>
 import SongList from "base/song-list/song-list";
 import Scroll from "base/scroll/scroll";
-// import { playlistMixin } from '../../common/js/mixin'
 import { playlistMixin } from "common/js/mixin.js";
 import { mapActions } from "vuex";
 import Loading from 'base/loading/loading'
