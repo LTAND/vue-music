@@ -4,20 +4,20 @@
     <div class="playlist" @click.stop>
       <div class="list-header">
         <div class="title">
-          <span><i class="mode-icon" :class="clsModeIcon"></i></span>
+          <span @click="togglePalyMode"><i class="mode-icon" :class="clsModeIcon"></i></span>
           <span class="model-text">{{modeText}}</span>
           <span @click="showConfirm"><i class="iconfont icon-clean"></i></span>
         </div>
       </div>
       <scroll ref="listScroll" :data="sequenceList" class="list-scroll">
-          <ul class="list-content" ref="listContent">
-            <li class="list-item" v-for="(item, index) in sequenceList" :key="item.id" @click="selectItem(item, index)">
-              <span><i class="current" :class="getCurrentIcon(item)"></i></span>
-              <span class="name">{{item.name}}</span>
-              <span><i class="iconfont icon-weishoucang"></i></span>
-              <span @click="deleteOne(item)"><i class="iconfont icon-close"></i></span>
-            </li>
-          </ul>
+        <ul class="list" ref="listContent">
+          <li class="list-item" v-for="(item, index) in sequenceList" v-bind:key="item.id" @click="selectItem(item, index)">
+            <span><i class="current" :class="getCurrentIcon(item)"></i></span>
+            <span class="name">{{item.name}}</span>
+            <span><i class="iconfont icon-weishoucang"></i></span>
+            <span @click="deleteOne(item)"><i class="iconfont icon-close"></i></span>
+          </li>
+        </ul>
       </scroll>
       <div class="add-btn-wrapper" @click="addSong">
         <div class="add-btn">
@@ -39,7 +39,10 @@ import { playMode } from "common/js/config.js"
 import Scroll from 'base/scroll/scroll'
 import Confirm from "base/confirm/confirm"
 import { mapGetters, mapMutations, mapActions } from "vuex"
+import { playerMixin } from "common/js/mixin.js"
+
 export default {
+  mixins:[playerMixin],
   data () {
     return {
       showFlag: false
@@ -50,18 +53,18 @@ export default {
     Confirm
   },
   computed: {
-    clsModeIcon(){
-      switch(this.mode){
-        case playMode.sequence:
-          return "iconfont icon-sequence";
-        case playMode.loop:
-          return "iconfont icon-loop"
-        case playMode.random:
-          return "iconfont icon-random"
-        default:
-          return ""
-      }
-    },
+    // clsModeIcon(){
+    //   switch(this.mode){
+    //     case playMode.sequence:
+    //       return "iconfont icon-sequence";
+    //     case playMode.loop:
+    //       return "iconfont icon-loop"
+    //     case playMode.random:
+    //       return "iconfont icon-random"
+    //     default:
+    //       return ""
+    //   }
+    // },
     modeText(){
       switch(this.mode){
         case playMode.sequence:
@@ -73,13 +76,13 @@ export default {
         default:
           return "";
       }
-    },
-    ...mapGetters([
-      "sequenceList",
-      "currentSong",
-      "mode",
-      "playList"
-    ])
+    }
+    // ,...mapGetters([
+    //   "sequenceList",
+    //   "currentSong",
+    //   "mode",
+    //   "playList"
+    // ])
   },
   methods: {
     getCurrentIcon(item){
@@ -132,7 +135,7 @@ export default {
       const index = this.sequenceList.findIndex((song)=>{
         return current.id === song.id
       })
-      // console.log(this.$refs.listContent.children[index])
+      console.log(this.$refs.listContent.children[index])
       this.$refs.listScroll.scrollToElement(this.$refs.listContent.children[index], 300)
     },
     ...mapMutations({
@@ -143,6 +146,15 @@ export default {
       "deleteSong",
       "deleteSongList"
     ])
+  },
+  watch:{
+    currentSong(newSong, oldSong){
+      // 上下一首
+      if(this.showFlag || newSong.id === oldSong.id){
+        return
+      }
+      this.scrollToCurrent(newSong)
+    }
   }
 }
 
@@ -163,23 +175,23 @@ export default {
     //   .playlist
     //     transition: all 0.3
     .playlist
-      width 100%
-      position absolute  
+      width: 100%
+      position: absolute
       bottom: 0
       left: 0
       background: $color-hightLight-background
       .list-header
         padding 20px 30px 10px 20px
         .title
-          display flex
+          display: flex
           align-items: center
           .mode-icon
-            width 30px
-            height 30px
-            color:$color-theme-d
+            width: 30px
+            height: 30px
+            color: $color-theme-d
             font-size: 30px
           .model-text
-            flex 1
+            flex: 1
             margin-left: 10px
             font-size: $font-size-medium
             color: $color-text-l
@@ -188,7 +200,7 @@ export default {
       .list-scroll
         max-height 240px 
         overflow hidden  
-        .list-content
+        .list
           height 100% 
           overflow hidden
           padding-left: 0

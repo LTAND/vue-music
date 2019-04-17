@@ -65,9 +65,11 @@
           </div>
           <div class="operators">
             <span @click="togglePalyMode" :class="disableCls">
-              <i v-show="mode===getPlayModeConfig.sequence" class="iconfont icon-sequence"></i>
+              <i :class="clsModeIcon"></i>
+              <!-- mixin.js -->
+              <!-- <i v-show="mode===getPlayModeConfig.sequence" class="iconfont icon-sequence"></i>
               <i v-show="mode===getPlayModeConfig.loop" class="iconfont icon-loop"></i>
-              <i v-show="mode===getPlayModeConfig.random" class="iconfont icon-random"></i>
+              <i v-show="mode===getPlayModeConfig.random" class="iconfont icon-random"></i> -->
             </span>
             <span @click="playPrev" :class="disableCls">
               <i class="iconfont icon--previous"></i>
@@ -137,8 +139,10 @@ import scroll from "../../base/scroll/scroll";
 import Playlist from '../playlist/playlist'
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
+import { playerMixin } from "../../common/js/mixin.js"
 
 export default {
+  mixins:[playerMixin],
   data() {
     return {
       songReady: false,
@@ -167,11 +171,12 @@ export default {
     ...mapGetters([
       "playList",
       "fullScreen",
-      "currentSong",
-      "playing",
-      "currentIndex",
-      "mode",
-      "sequenceList"
+      "currentIndex"
+      // mixin.js
+      // ,"mode",
+      // "playing",
+      // "currentSong",
+      // "sequenceList"
     ])
   },
   created() {
@@ -291,7 +296,7 @@ export default {
     },
     togglePalyMode() {
       const mode = (this.mode + 1) % 3;
-      let list = null;
+      // let list = null;
       // if(mode === playMode.sequence){
       //   list = shuffle(this.sequence)
       // }else{
