@@ -2,7 +2,7 @@ import * as types from './mutation-types'
 import { shuffle } from './../common/js/util'
 import { playMode } from './../common/js/config'
 
-import { saveSearch, deleteSearch, clearSearch } from './../common/js/cache'
+import { saveSearch, deleteSearch, clearSearch, savePlay, clearPlay } from './../common/js/cache'
 
 function findIndex(list, song) {
   /**
@@ -87,18 +87,6 @@ export const insertSong = function ({ commit, state }, song) {
   commit(types.SET_PLAYING_STATE, true)
 }
 
-export const savaSearcHistory = function ({ commit }, query) {
-  commit(types.SET_SEARCH_HISTORY, saveSearch(query))
-}
-
-export const deleteSearcHistory = function({commit}, query) {
-  commit(types.SET_SEARCH_HISTORY, deleteSearch(query))
-}
-
-export const clearSearcHistory = function ({ commit }) {
-  commit(types.SET_SEARCH_HISTORY, clearSearch())
-}
-
 export const deleteSong = function ({commit, state}, song) {
   let playList = state.playList.slice()
   let sequenceList = state.sequenceList.slice()
@@ -123,9 +111,31 @@ export const deleteSong = function ({commit, state}, song) {
   }
 }
 
+// 增删空 - 搜索历史
+export const saveSearcHistory = function ({ commit }, query) {
+  commit(types.SET_SEARCH_HISTORY, saveSearch(query))
+}
+
+export const deleteSearcHistory = function({commit}, query) {
+  commit(types.SET_SEARCH_HISTORY, deleteSearch(query))
+}
+
+export const clearSearcHistory = function ({ commit }) {
+  commit(types.SET_SEARCH_HISTORY, clearSearch())
+}
+
 export const deleteSongList = function({commit}) {
   // 删除歌曲
   commit(types.SET_CURRENT_INDEX, -1)
   commit(types.SET_PLAYLIST, [])
   commit(types.SET_PLAYING_STATE, false)
+}
+
+// 增删空 - 播放历史
+export const savePlayHistory = function({commit}, song) {
+  commit(types.SET_PLAY_HISTORY, savePlay(song))
+}
+
+export const clearPlayHistory = function({commit}) {
+  commit(types.SET_PLAY_HISTORY, clearPlay())
 }

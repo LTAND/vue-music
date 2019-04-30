@@ -127,7 +127,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 import animations from "create-keyframe-animation";
 import { prefixStyle } from "common/js/dom";
 import { playMode } from "../../common/js/config";
@@ -171,11 +171,11 @@ export default {
     ...mapGetters([
       "playList",
       "fullScreen",
+      "currentSong",
       "currentIndex"
       // mixin.js
-      // ,"mode",
+      // "mode",
       // "playing",
-      // "currentSong",
       // "sequenceList"
     ])
   },
@@ -329,7 +329,7 @@ export default {
       this.$refs.audio.currentTime = 0;
       this.$refs.audio.play();
       if(this.currentLyric){
-        //单曲循环的时候，歌词循环播放
+        // 单曲循环的时候，歌词循环播放
         this.currentLyric.seek(0)
       }
     },
@@ -375,6 +375,7 @@ export default {
 
     ready() {
       this.songReady = true;
+      this.savePlayHistory(this.currentSong)
     },
     error() {
       // 歌曲加载失败
@@ -476,8 +477,13 @@ export default {
       setCurrentIndex: "SET_CURRENT_INDEX",
       setPlayMode: "SET_PLAY_MODE",
       setPlayList: "SET_PLAYLIST",
-      setSequenceList: "SET_SEQUENCE_LIST"
-    })
+      setSequenceList: "SET_SEQUENCE_LIST",
+
+      setPlayHistory: "SET_PLAY_HISTORY"
+    }),
+    ...mapActions([
+      "savePlayHistory"
+    ])
   },
   watch: {
     currentSong(newSong, oldSong) {

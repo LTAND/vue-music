@@ -59,9 +59,9 @@ export default {
 @import '~common/stylus/variable'
 @import '~common/stylus/mixin';
 .song-list
-  overflow: hidden
   text-align: left
   font-size: $font-size-medium
+  overflow: hidden
   background-color: $color-background
   ul
     padding: 30px 30px

@@ -22,7 +22,6 @@
         </div>
       </ul>
     </srocll>
-    <router-view></router-view>
   </div>
 </template>
 
@@ -75,7 +74,7 @@ export default {
       } else {
         this.insertSong(item);
       }
-      this.$emit('select') // 派发处理搜素历史
+      this.$emit('select',item) // 派发处理搜素历史
     },
     nameText(item) {
       if (item.type === TYPE_SINGER) {
@@ -168,7 +167,7 @@ export default {
 .suggest
   position: fixed
   width: 100%
-  top: 160px
+  top: 150px
   left: 0
   bottom: 0
   .suggest-content

@@ -19,7 +19,7 @@
           </li>
         </ul>
       </scroll>
-      <div class="add-btn-wrapper" @click="addSong">
+      <div class="add-btn-wrapper" @click.stop="addSong">
         <div class="add-btn">
           <span><i class="iconfont icon-add"></i></span>
           <span class="text">添加歌曲到队列</span>
@@ -30,6 +30,7 @@
       </div>
     </div>
     <confirm ref="confirm" title="是否清空播放列表" confirmBtnText="清空" @confirm="deleteAll" @cancel="closeConfirm"></confirm>
+    <add-song ref="addSong"></add-song>
   </div>
   <!-- </transition> -->
 </template>
@@ -40,6 +41,7 @@ import Scroll from 'base/scroll/scroll'
 import Confirm from "base/confirm/confirm"
 import { mapGetters, mapMutations, mapActions } from "vuex"
 import { playerMixin } from "common/js/mixin.js"
+import addSong from "components/add-song/add-song"
 
 export default {
   mixins:[playerMixin],
@@ -50,7 +52,8 @@ export default {
   },
   components: {
     Scroll,
-    Confirm
+    Confirm,
+    addSong
   },
   computed: {
     // clsModeIcon(){
@@ -113,7 +116,8 @@ export default {
       this.setPlayingState(true)
     },
     addSong(){
-      alert("addSong Page")
+      this.$refs.addSong.show()
+      // alert("addSong Page")
     },
     deleteOne(item){
       this.deleteSong(item)

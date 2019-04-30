@@ -19,7 +19,7 @@
       </scroll>
     </div>
     <suggest
-      @select="savaSearch"
+      @select="saveSearch"
       @listScroll="blurInput"
       class="suggest"
       ref="suggest"
@@ -31,40 +31,30 @@
       @confirm="clearSearcHistory"
       @cancel="closeWindowClear"
       title="是否清空所有搜索历史记录"
-      confirmBtnText="清空"
+      confirmBtnText = "清空"
     ></confirm>
   </div>
 </template>
 
 <script>
-import SearchBox from "base/search-box/serach-box";
+import SearchBox from "base/search-box/search-box";
 import Suggest from "components/suggest/suggest.vue";
 import { createSong } from "common/js/song.js";
 import { getHotKey, search } from "api/search.js";
 import { ERR_OK } from "api/config.js";
-import { playlistMixin } from "common/js/mixin.js";
+import { playlistMixin, searchMixin  } from "common/js/mixin.js";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import SearchList from "base/search-list/search-list";
 import Confirm from "base/confirm/confirm";
 import Scroll from "base/scroll/scroll";
 
 export default {
-  mixins: [playlistMixin],
+  mixins: [playlistMixin, searchMixin],
   data() {
     return {
       hotKey: [],
-      query: "",
       isClear: false
     };
-  },
-  watch: {
-    query(newQuery) {
-      if (!newQuery) {
-        setTimeout(() => {
-            this.$refs.shortcut.refresh();
-        }, 20);
-      }
-    }
   },
   components: {
     SearchBox,
@@ -79,13 +69,22 @@ export default {
   computed: {
     shortcut() {
       return this.hotKey.concat(this.searcHistory);
-    },
-    ...mapGetters(["searcHistory"])
+    }
+    // ,...mapGetters(["searcHistory"])
+  },
+  watch: {
+    query(newQuery) {
+      if (!newQuery) {
+        setTimeout(() => {
+          this.$refs.shortcut.refresh();
+        }, 20);
+      }
+    }
   },
   methods: {
-    savaSearch(){
-      this.savaSearcHistory(this.query)
-    },
+    // savaSearch(){
+    //   this.saveSearcHistory(this.query)
+    // },
     deleteHistory(item){
       this.deleteSearcHistory(item)
     },
@@ -105,15 +104,15 @@ export default {
       this.$refs.shortcutWrapper.style.bottom = bottom;
       this.$refs.shortcut.refresh(); // srcoll组件刷新
     },
-    onQueryChange(newQuery) {
-      this.query = newQuery;
-    },
-    addQuery(hotKey) {
-      this.$refs.SearchBox.setQuery(hotKey);
-    },
-    blurInput() {
-      this.$refs.SearchBox.blur();
-    },
+    // onQueryChange(newQuery) {
+    //   this.query = newQuery;
+    // },
+    // addQuery(hotKey) {
+    //   this.$refs.SearchBox.setQuery(hotKey);
+    // },
+    // blurInput() {
+    //   this.$refs.SearchBox.blur();
+    // },
     _getHotKey() {
       getHotKey().then(res => {
         if (res.code === ERR_OK) {
@@ -121,12 +120,12 @@ export default {
         }
       });
     },
-    ...mapMutations({
-      setSearchHistory: "SET_SEARCH_HISTORY"
-    }),
+    // ...mapMutations({
+    //   setSearchHistory: "SET_SEARCH_HISTORY"
+    // }),
     ...mapActions([
-      "savaSearcHistory",
-      "deleteSearcHistory",
+      // "saveSearcHistory",
+      // "deleteSearcHistory",
       "clearSearcHistory"
     ])
   }
