@@ -2,7 +2,7 @@
   <div class="search" ref="search">
     <search-box ref="SearchBox" @query="onQueryChange"></search-box>
     <div class="shortcut-wrapper" ref="shortcutWrapper" v-show="!query">
-      <scroll class="shortcut" ref="shortcut" :data="shortcut">
+      <scroll class="shortcut" :refreshDelay="refreshDelay" ref="shortcut" :data="shortcut">
         <div>
           <div class="hot-key" v-show="!query">
             <div class="title">热门搜索</div>

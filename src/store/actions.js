@@ -2,7 +2,7 @@ import * as types from './mutation-types'
 import { shuffle } from './../common/js/util'
 import { playMode } from './../common/js/config'
 
-import { saveSearch, deleteSearch, clearSearch, savePlay, clearPlay } from './../common/js/cache'
+import { saveSearch, deleteSearch, clearSearch, savePlay, clearPlay, saveFavorite, deleteFavorite } from './../common/js/cache'
 
 function findIndex(list, song) {
   /**
@@ -111,7 +111,7 @@ export const deleteSong = function ({commit, state}, song) {
   }
 }
 
-// 增删空 - 搜索历史
+/* 增删空 - 搜索历史 */
 export const saveSearcHistory = function ({ commit }, query) {
   commit(types.SET_SEARCH_HISTORY, saveSearch(query))
 }
@@ -131,11 +131,20 @@ export const deleteSongList = function({commit}) {
   commit(types.SET_PLAYING_STATE, false)
 }
 
-// 增删空 - 播放历史
+/*  增删空 - 播放历史 */
 export const savePlayHistory = function({commit}, song) {
   commit(types.SET_PLAY_HISTORY, savePlay(song))
 }
 
 export const clearPlayHistory = function({commit}) {
   commit(types.SET_PLAY_HISTORY, clearPlay())
+}
+
+// TODO working favorite
+/* 收藏功能 */
+export const saveFavoriteSong = function({commit}, song) {
+  commit(types.SET_FAVORITE_LIST, saveFavorite(song))
+}
+export const deteleFavoriteSong = function({commit}, song) {
+  commit(types.SET_FAVORITE_LIST, deleteFavorite(song))
 }

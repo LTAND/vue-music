@@ -76,7 +76,8 @@ export const playerMixin = {
 export const searchMixin = {
   data() {
     return {
-      query: ""
+      query: "",
+      refreshDelay: 100 // 保证search-list动画完成后，再refresh()
     }
   },
   computed: {
@@ -93,7 +94,7 @@ export const searchMixin = {
       this.$refs.SearchBox.setQuery(hotKey);
     },
     blurInput() {
-      this.$refs.SearchBox.blur();
+      this.$refs.searchBox.blur();
     },
     ...mapMutations({
       setSearchHistory: "SET_SEARCH_HISTORY"

@@ -12,9 +12,6 @@
 
 <script>
 export default {
-  data() {
-    return {};
-  },
   props: {
     switches: {
       type: Array,
@@ -24,6 +21,9 @@ export default {
       type: Number,
       default: 0
     }
+  },
+  data() {
+    return {};
   },
   components: {
   },

@@ -15,10 +15,10 @@
         <div class="list-scroll-wrapper">
           <scroll ref="songScrollList" class="list-scroll" v-if="switcheIndex === 0" :data="playHistory">
             <div class="list-inner">
-              <song-list class="song-list" :songs="playHistory"></song-list>
+              <song-list class="song-list" :songs="playHistory" @select="selectSong"></song-list>
             </div>
           </scroll>
-          <scroll ref="searchScrollList" class="list-scroll" v-if="switcheIndex === 1" :data="searcHistory">
+          <scroll ref="searchScrollList" :refreshDelay="refreshDelay" class="list-scroll" v-if="switcheIndex === 1" :data="searcHistory">
             <div class="list-inner">
               <search-list
                 ref="searchList"
@@ -43,15 +43,16 @@
         @listScroll="blurInput"
       ></suggest>
     </div>
-  
-    <div class="top-tip-wrapper">
-      <top-tip></top-tip>
-    </div>
+
+    <top-tip class="top-tip" ref="topTip">
+      <div class="top-tip-title">
+        <span class="test">1首歌曲已添加到列表</span>
+      </div>
+    </top-tip>
   </div>
 </template>
 
 <script>
-// TODO import top-tip
 import { mapGetters, mapActions } from "vuex";
 import Switches from "base/switches/switches";
 import SearchBox from "base/search-box/search-box";
@@ -93,9 +94,19 @@ export default {
   methods: {
     selectSuggest(){
       this.saveSearch()
+      this.showTip() // 显示添加歌曲提示
     },
     switchItem(index) {
       this.switcheIndex = index;
+    },
+    showTip(){
+      this.$refs.topTip.show()
+    },
+    selectSong(){
+      if(index !==0){
+        this.insertSong(new Song(song));
+        this.showTip()
+      }
     },
     show() {
       this.showFlag = true;
@@ -114,7 +125,7 @@ export default {
     hide() {
       this.showFlag = false;
     },
-    ...mapActions(["savePlayHistory"])
+    ...mapActions(["insertSong"])
   }
 };
 </script>
@@ -160,6 +171,10 @@ export default {
           .list-inner
             .search-list
               padding: 0 30px
+  .top-tip
+    text-align center
+    padding: 10px 5px
+    text-align: $color-text
 </style>
 
 
