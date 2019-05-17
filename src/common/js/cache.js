@@ -64,7 +64,7 @@ export function loadPlay() {
 
 export function savePlay(song) {
   let songs = storage.get(PLAY_KEY, [])
-  insertArry(songs, song, item => item === song, PLAY_MAX_LEN)
+  insertArry(songs, song, item => item.id === song.id, PLAY_MAX_LEN)
   storage.set(PLAY_KEY, songs)
   return songs
 }
@@ -77,14 +77,14 @@ export function clearPlay() {
 // 收藏存储
 export function saveFavorite(song) {
   let songs = storage.get(FAVORITE_KEY, []) // 获取
-  insertArry(songs, song, item => item === song, FAVORITE_MAX_LEN)
+  insertArry(songs, song, item => item.id === song.id, FAVORITE_MAX_LEN)
   storage.set(FAVORITE_KEY, songs) // 存放
   return songs
 }
 
 export function deleteFavorite(song) {
   let songs = storage.get(FAVORITE_KEY, [])
-  deleteFromArray(songs, song, item => item === song, FAVORITE_MAX_LEN)
+  deleteFromArray(songs, item => item.id === song.id, FAVORITE_MAX_LEN)
   storage.set(FAVORITE_KEY, songs) // 存放
   return songs
 }

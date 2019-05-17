@@ -14,7 +14,7 @@
           <li class="list-item" v-for="(item, index) in sequenceList" v-bind:key="item.id" @click="selectItem(item, index)">
             <span><i class="current" :class="getCurrentIcon(item)"></i></span>
             <span class="name">{{item.name}}</span>
-            <span><i class="iconfont icon-weishoucang"></i></span>
+            <span @click="toggleFavorite(item)"><i :class="clsFavoriteIcon(item)"></i></span>
             <span @click="deleteOne(item)"><i class="iconfont icon-close"></i></span>
           </li>
         </ul>
@@ -226,7 +226,11 @@ export default {
               flex: 1
               color: $color-text-d
               font-size: $font-size-medium
-            .icon-weishoucang
+            .icon-yishoucang
+              color: $color-sub-theme
+              font-size: $font-size-medium
+              margin-right: 10px
+            .icon-weishoucang 
               color: $color-theme
               font-size: $font-size-medium
               margin-right: 10px

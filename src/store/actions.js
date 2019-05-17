@@ -140,11 +140,10 @@ export const clearPlayHistory = function({commit}) {
   commit(types.SET_PLAY_HISTORY, clearPlay())
 }
 
-// TODO working favorite
 /* 收藏功能 */
-export const saveFavoriteSong = function({commit}, song) {
+export const saveFavoriteList = function({commit}, song) {
   commit(types.SET_FAVORITE_LIST, saveFavorite(song))
 }
-export const deteleFavoriteSong = function({commit}, song) {
+export const deleteFavoriteList = function({commit}, song) {
   commit(types.SET_FAVORITE_LIST, deleteFavorite(song))
 }

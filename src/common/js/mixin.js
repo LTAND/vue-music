@@ -24,7 +24,7 @@ export const playlistMixin = {
     }
   }
 }
-
+/* player.vue player-list.vue 共享收藏功能 */
 export const playerMixin = {
   computed: {
     clsModeIcon() {
@@ -44,10 +44,35 @@ export const playerMixin = {
       "mode",
       "playing",
       "currentSong",
-      "sequenceList"
+      "sequenceList",
+      "favoriteList"
     ])
   },
   methods: {
+    /* 收藏功能 */
+    isFavorite(song) {
+      // 判断是否在收藏列表
+      const index = this.favoriteList.findIndex((item) => {
+        return item.id === song.id
+      })
+      return index > -1 // 收藏此歌曲为true
+    },
+    clsFavoriteIcon(song) {
+      // 切换图标状态
+      if (this.isFavorite(song)) {
+        return "iconfont icon-yishoucang"
+      } else {
+        return "iconfont icon-weishoucang"
+      }
+    },
+    toggleFavorite(song) {
+      // 增删收藏列表
+      if (this.isFavorite(song)) {
+        this.deleteFavoriteList(song)
+      } else {
+        this.saveFavoriteList(song)
+      }
+    },
     togglePalyMode() {
       const mode = (this.mode + 1) % 3;
       this.setPlayMode(mode);
@@ -69,7 +94,15 @@ export const playerMixin = {
         }
       });
       this.setCurrentIndex(index);
-    }
+    },
+    ...mapMutations({
+      "setPlayMode": "SET_PLAY_MODE",
+      "setPlayList": "SET_PLAYLIST"
+    }),
+    ...mapActions([
+      "saveFavoriteList",
+      "deleteFavoriteList"
+    ])
   }
 }
 

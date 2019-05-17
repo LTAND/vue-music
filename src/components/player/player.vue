@@ -81,9 +81,10 @@
             <span @click="playNext" :class="disableCls">
               <i class="iconfont icon--next"></i>
             </span>
-            <span class="icon-shoucang">
-              <i class="iconfont icon-weishoucang"></i>
-              <i v-show="false" class="iconfont icon-yishoucang"></i>
+            <span class="icon-sho`ucang" @click="toggleFavorite(currentSong)">
+              <i :class="clsFavoriteIcon(currentSong)"></i>
+              <!-- <i v-show="favoriteFlag" class="iconfont icon-weishoucang"></i>
+              <i v-show="favoriteFlag" class="iconfont icon-yishoucang"></i> -->
             </span>
           </div>
         </div>
@@ -154,6 +155,7 @@ export default {
       currentShow: "cd"
     };
   },
+  // TODO working favorite
   computed: {
     disableCls() {
       return this.songReady ? "" : "disable";
@@ -176,7 +178,8 @@ export default {
       // mixin.js
       // "mode",
       // "playing",
-      // "sequenceList"
+      // "sequenceList",
+      // "favoriteList"
     ])
   },
   created() {
@@ -476,9 +479,7 @@ export default {
       setPlayingState: "SET_PLAYING_STATE",
       setCurrentIndex: "SET_CURRENT_INDEX",
       setPlayMode: "SET_PLAY_MODE",
-      setPlayList: "SET_PLAYLIST",
       setSequenceList: "SET_SEQUENCE_LIST",
-
       setPlayHistory: "SET_PLAY_HISTORY"
     }),
     ...mapActions([
@@ -669,6 +670,8 @@ export default {
             font-size: 30px
         .icon-center i
           font-size: 40px
+        .icon-yishoucang
+          color: $color-sub-theme 
     &.normal-enter-active, &.normal-leave-active
       transition: all 0.4s
       .top, .bottom
