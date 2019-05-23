@@ -8,7 +8,7 @@
       @leave="leave"
       @after-leave="afterLeave"
     >
-      <div class="normal-player" v-show="fullScreen">
+      <div class="normal-player" v-show="fullScreen" ref="NormalPlayer">
         <div class="background">
           <img width="100%" height="100%" :src="currentSong.img">
         </div>
@@ -19,6 +19,7 @@
           <h1 class="title">{{currentSong.name}}</h1>
           <span class="sub">{{currentSong.singer}}</span>
         </div>
+        
         <div
           class="middle"
           @touchstart.prevent="middleTouchStart"
@@ -66,7 +67,7 @@
           <div class="operators">
             <span @click="togglePalyMode" :class="disableCls">
               <i :class="clsModeIcon"></i>
-              <!-- mixin.js -->
+              <!-- mixin.js 改为类名-->
               <!-- <i v-show="mode===getPlayModeConfig.sequence" class="iconfont icon-sequence"></i>
               <i v-show="mode===getPlayModeConfig.loop" class="iconfont icon-loop"></i>
               <i v-show="mode===getPlayModeConfig.random" class="iconfont icon-random"></i> -->
@@ -119,7 +120,7 @@
     <audio
       ref="audio"
       :src="currentSong.url"
-      @canplay="ready"
+      @play="ready"
       @error="error"
       @timeupdate="updateTime"
       @ended="end"
@@ -190,6 +191,7 @@ export default {
       this.$refs.playlist.show()
     },
     back() {
+      this.$refs.NormalPlayer.style.display="none"
       this.setFullScreen(false);
     },
     open() {
@@ -199,6 +201,10 @@ export default {
     // 歌词处理 start
     getLyric() {
       this.currentSong.getLyric().then(lyric => {
+        if(this.currentSong.lyric !== lyric){
+          // 保持歌曲与歌词同步
+          return 
+        }
         this.currentLyric = new Lyric(lyric, this.handleLyric);
         if (this.playing) {
           this.currentLyric.play();
@@ -347,6 +353,7 @@ export default {
       }
       if(this.playList.length === 1){
         this.loop()
+        return
       }else{
         let index = this.currentIndex - 1;
         if (index < 0) {
@@ -364,6 +371,7 @@ export default {
       if(this.playList.length === 1){
         // 只有一首歌是,单曲循环
         this.loop()
+        return 
       }else{
         let index = this.currentIndex + 1;
         if (index === this.playList.length) {
@@ -497,8 +505,9 @@ export default {
         // 每点一次歌,停止上一首的歌词
         this.currentLyric.stop();
       }
-      // 防止后台切换后，没
-      setTimeout(()=>{
+      // 防止后台切换后，延迟 
+      clearTimeout(this.timer)
+      this.timer = setTimeout(()=>{
         this.$nextTick(() => {
           this.$refs.audio.play();
           this.getLyric();

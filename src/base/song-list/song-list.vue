@@ -64,9 +64,9 @@ export default {
   overflow: hidden
   background-color: $color-background
   ul
-    padding: 30px 30px
     margin: 0 auto
     list-style: none
+    padding: 30px 30px
     .song
       display flex
       height 64px

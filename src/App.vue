@@ -13,6 +13,7 @@
 import MHeader from "components/m-header/m-header";
 import Tab from "components/tab/tab";
 import Player from "components/player/player";
+import vConsole from "vconsole";
 export default {
   name: "App",
   components: {
@@ -28,9 +29,9 @@ export default {
 @import 'common/stylus/base.styl'
 
 #app
-  width 100%
-  height 100%
-  position fixed
+  width: 100%
+  height: 100%
+  position: fixed
   top: 0
   left: 0
   right: 0

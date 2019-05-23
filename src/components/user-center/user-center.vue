@@ -9,7 +9,7 @@
         <i class="iconfont icon-play2"></i>
         <span class="play-text">随机播放全部</span>
       </div>
-      <div class="scroll-wrapper">
+      <div class="scroll-wrapper" v-if="!isNoResult">
         <scroll class="list-scroll" :data="favoriteList" v-if="switchIndex === FAVORITE_LIST_INDEX">
           <div class="inner">
             <song-list class="song-list" :songs="favoriteList" @select="selectSong"></song-list>
@@ -22,14 +22,18 @@
         </scroll>
       </div>
     </div>
+    <div class="no-resilt-wrapper" v-if="isNoResult"> 
+      <no-result :title="noResultDesc"></no-result>
+    </div>
   </div>
 </template>
 
 <script>
+import NoResult from "base/no-result/no-result"
 import Switches from "base/switches/switches";
 import SongList from "base/song-list/song-list"
 import Scroll from "base/scroll/scroll"
-import { mapGetters,mapActions } from "vuex"
+import { mapGetters, mapActions } from "vuex"
 import Song from "common/js/song.js"
    
 export default {
@@ -37,7 +41,7 @@ export default {
     return {
       switches: [
         { name: "我喜欢的" }, 
-        { name: "最近播放" }
+        { name: "最近听的" }
       ],
       switchIndex: 0,
       showFlag: false,
@@ -48,9 +52,26 @@ export default {
   components: {
     Switches,
     SongList,
-    Scroll
+    Scroll,
+    NoResult
   },
   computed: {
+    noResultDesc(){
+      //no-result  文本
+      if(this.switchIndex === this.FAVORITE_LIST_INDEX){
+        return "暂时无收藏歌曲"
+      }else{ // switchIndex===2
+        return "你还没听歌曲"
+      }
+    },
+    isNoResult(){
+      //是否使用no-result 
+      if(this.switchIndex === this.FAVORITE_LIST_INDEX){
+        return !this.favoriteList.length  // !0 => true
+      }else{ // switchIndex===2
+        return !this.playHistory.length
+      }
+    },
     ...mapGetters([
       "favoriteList",
       "playHistory"
@@ -59,6 +80,10 @@ export default {
   methods: {
     random(){
       let list = this.switchIndex === this.FAVORITE_LIST_INDEX?this.favoriteList:this.playHistory
+      if(list.length === 0){
+        // 没有数据直接退出
+        return
+      }
       list = list.map((song)=>{
         return new Song(song)
       })
@@ -138,4 +163,9 @@ export default {
       .list-scroll
         height 100%
         overflow hidden
+  .no-resilt-wrapper
+    position absolute 
+    width 100%
+    top: 50%
+    transform translateY(-50%)
 </style>
