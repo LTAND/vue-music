@@ -19,7 +19,7 @@
           <h1 class="title">{{currentSong.name}}</h1>
           <span class="sub">{{currentSong.singer}}</span>
         </div>
-        
+
         <div
           class="middle"
           @touchstart.prevent="middleTouchStart"
@@ -31,9 +31,7 @@
               <img :src="currentSong.img">
             </div>
             <div class="playing-lyric-wrapper">
-              <div class="playing-lyric">
-                {{playingLyric}}
-              </div>
+              <div class="playing-lyric">{{playingLyric}}</div>
             </div>
           </div>
           <scroll class="middle-r" ref="lyricList" :data="currentLyric && currentLyric.lines">
@@ -70,7 +68,7 @@
               <!-- mixin.js 改为类名-->
               <!-- <i v-show="mode===getPlayModeConfig.sequence" class="iconfont icon-sequence"></i>
               <i v-show="mode===getPlayModeConfig.loop" class="iconfont icon-loop"></i>
-              <i v-show="mode===getPlayModeConfig.random" class="iconfont icon-random"></i> -->
+              <i v-show="mode===getPlayModeConfig.random" class="iconfont icon-random"></i>-->
             </span>
             <span @click="playPrev" :class="disableCls">
               <i class="iconfont icon--previous"></i>
@@ -85,7 +83,7 @@
             <span class="icon-sho`ucang" @click="toggleFavorite(currentSong)">
               <i :class="clsFavoriteIcon(currentSong)"></i>
               <!-- <i v-show="favoriteFlag" class="iconfont icon-weishoucang"></i>
-              <i v-show="favoriteFlag" class="iconfont icon-yishoucang"></i> -->
+              <i v-show="favoriteFlag" class="iconfont icon-yishoucang"></i>-->
             </span>
           </div>
         </div>
@@ -138,13 +136,13 @@ import ProgressCircle from "../../base/progress-circle/progress-circle";
 import { shuffle } from "../../common/js/util";
 import Lyric from "lyric-parser";
 import scroll from "../../base/scroll/scroll";
-import Playlist from '../playlist/playlist'
+import Playlist from "../playlist/playlist";
 const transform = prefixStyle("transform");
 const transitionDuration = prefixStyle("transitionDuration");
-import { playerMixin } from "../../common/js/mixin.js"
+import { playerMixin } from "../../common/js/mixin.js";
 
 export default {
-  mixins:[playerMixin],
+  mixins: [playerMixin],
   data() {
     return {
       songReady: false,
@@ -187,34 +185,37 @@ export default {
     this.touch = {};
   },
   methods: {
-    showPlaylist(){
-      this.$refs.playlist.show()
+    showPlaylist() {
+      this.$refs.playlist.show();
     },
     back() {
-      this.$refs.NormalPlayer.style.display="none"
+      this.$refs.NormalPlayer.style.display = "none";
       this.setFullScreen(false);
     },
     open() {
       this.setFullScreen(true);
     },
-    
+
     // 歌词处理 start
     getLyric() {
-      this.currentSong.getLyric().then(lyric => {
-        if(this.currentSong.lyric !== lyric){
-          // 保持歌曲与歌词同步
-          return 
-        }
-        this.currentLyric = new Lyric(lyric, this.handleLyric);
-        if (this.playing) {
-          this.currentLyric.play();
-        }
-      }).catch(()=>{
-        // 歌词出现问题，就初始化
-        this.currentLyric = null
-        this.currentLineNum = 0
-        this.playingLyric = ""
-      });
+      this.currentSong
+        .getLyric()
+        .then(lyric => {
+          if (this.currentSong.lyric !== lyric) {
+            // 保持歌曲与歌词同步
+            return;
+          }
+          this.currentLyric = new Lyric(lyric, this.handleLyric);
+          if (this.playing) {
+            this.currentLyric.play();
+          }
+        })
+        .catch(() => {
+          // 歌词出现问题，就初始化
+          this.currentLyric = null;
+          this.currentLineNum = 0;
+          this.playingLyric = "";
+        });
     },
     handleLyric({ lineNum, txt }) {
       // 回调函数, 根据歌词行号滚动
@@ -286,7 +287,9 @@ export default {
           opacity = 0;
         }
       }
-      this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`;
+      this.$refs.lyricList.$el.style[
+        transform
+      ] = `translate3d(${offsetWidth}px,0,0)`;
 
       const time = 300; // 滑动歌词页面时间
       this.$refs.lyricList.$el.style[transitionDuration] = `${time}ms`;
@@ -299,8 +302,8 @@ export default {
     // 播放器事件 start
     togglePlay() {
       this.setPlayingState(!this.playing);
-      if(this.currentLyric){
-        this.currentLyric.togglePlay()
+      if (this.currentLyric) {
+        this.currentLyric.togglePlay();
       }
     },
     togglePalyMode() {
@@ -337,9 +340,9 @@ export default {
       // 循环播放模式
       this.$refs.audio.currentTime = 0;
       this.$refs.audio.play();
-      if(this.currentLyric){
+      if (this.currentLyric) {
         // 单曲循环的时候，歌词循环播放
-        this.currentLyric.seek(0)
+        this.currentLyric.seek(0);
       }
     },
     autoPlay() {
@@ -351,10 +354,10 @@ export default {
       if (!this.songReady) {
         return;
       }
-      if(this.playList.length === 1){
-        this.loop()
-        return
-      }else{
+      if (this.playList.length === 1) {
+        this.loop();
+        return;
+      } else {
         let index = this.currentIndex - 1;
         if (index < 0) {
           index = this.playList.length - 1;
@@ -368,11 +371,11 @@ export default {
       if (!this.songReady) {
         return;
       }
-      if(this.playList.length === 1){
+      if (this.playList.length === 1) {
         // 只有一首歌是,单曲循环
-        this.loop()
-        return 
-      }else{
+        this.loop();
+        return;
+      } else {
         let index = this.currentIndex + 1;
         if (index === this.playList.length) {
           index = 0;
@@ -386,7 +389,7 @@ export default {
 
     ready() {
       this.songReady = true;
-      this.savePlayHistory(this.currentSong)
+      this.savePlayHistory(this.currentSong);
     },
     error() {
       // 歌曲加载失败
@@ -412,13 +415,13 @@ export default {
     },
     onProgressBarChange(percent) {
       const currentTime = this.currentSong.duration * percent;
-      console.log(currentTime)
-      this.$refs.audio.currentTime = currentTime
+      console.log(currentTime);
+      this.$refs.audio.currentTime = currentTime;
       this.autoPlay();
       // console.log("percent:", percent, "time", this.format(this.currentTime));
       // 滑动播放进度条随之改变歌词
-      if(this.currentLyric){
-        this.currentLyric.seek(currentTime * 1000)
+      if (this.currentLyric) {
+        this.currentLyric.seek(currentTime * 1000);
       }
     },
     // end
@@ -490,9 +493,7 @@ export default {
       setSequenceList: "SET_SEQUENCE_LIST",
       setPlayHistory: "SET_PLAY_HISTORY"
     }),
-    ...mapActions([
-      "savePlayHistory"
-    ])
+    ...mapActions(["savePlayHistory"])
   },
   watch: {
     currentSong(newSong, oldSong) {
@@ -505,14 +506,14 @@ export default {
         // 每点一次歌,停止上一首的歌词
         this.currentLyric.stop();
       }
-      // 防止后台切换后，延迟 
-      clearTimeout(this.timer)
-      this.timer = setTimeout(()=>{
+      // 防止后台切换后，延迟
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
         this.$nextTick(() => {
           this.$refs.audio.play();
           this.getLyric();
         });
-      }, 1000)
+      }, 1000);
     },
     playing(newPlay) {
       let audio = this.$refs.audio;
@@ -544,7 +545,7 @@ export default {
     top: 0
     left: 0
     right: 0
-    bottom: 0 
+    bottom: 0
     .background
       // 背景
       position: absolute
@@ -580,6 +581,7 @@ export default {
       .middle-l
         display: inline-block
         vertical-align: top
+        margin-left: 9%;
         // position: relative
         // width 100%
         // height 0
@@ -602,12 +604,11 @@ export default {
         .playing-lyric-wrapper
           width: 80%
           overflow: hidden
-          margin: 30px auto 0 auto 
+          margin: 30px auto 0 auto
           text-align: center
           font-size: 12px
       .middle-r
         // 滚动外壳
-        
         display: inline-block
         vertical-align: top
         // position relative
@@ -616,8 +617,9 @@ export default {
         overflow: hidden
         .lyric-wrapper
           width: 80%
-          margin: 0 auto
+          margin: 0 0
           overflow: hidden
+          margin-left: 21%
           text-align: center
           .text
             line-height: 32px
@@ -680,7 +682,7 @@ export default {
         .icon-center i
           font-size: 40px
         .icon-yishoucang
-          color: $color-sub-theme 
+          color: $color-sub-theme
     &.normal-enter-active, &.normal-leave-active
       transition: all 0.4s
       .top, .bottom

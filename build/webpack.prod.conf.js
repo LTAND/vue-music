@@ -14,6 +14,13 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const env = require('../config/prod.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
+  output: {
+    path: config.build.assetsRoot,
+    filename: utils.assetsPath('js/[name].[hash].js'),
+    chunkFilename: utils.assetsPath('js/[id].[hash].js')
+  },
+})
+const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,

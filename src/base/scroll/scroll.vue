@@ -30,6 +30,7 @@ export default {
       default: false
     },
     refreshDelay: {
+      // 重新计算的时间
       type: Number,
       default: 20
     },
@@ -38,6 +39,7 @@ export default {
       default: true
     },
     listenScroll: {
+      // 监听srcoll事件
       type: Boolean,
       default: false
     },
@@ -54,6 +56,7 @@ export default {
   },
   watch: {
     data() {
+      // data数据每变化，隔20毫秒刷新一次
       setTimeout(() => {
         this.refresh();
       }, 20);

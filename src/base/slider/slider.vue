@@ -51,9 +51,8 @@ export default {
     }, 20);
     window.addEventListener("resize", () => {
       // 监听窗口变化,重新计算宽度和better-scorll
-      if (!this.slider) {
-        return;
-      }
+      if (!this.slider) return;
+      
       this._setSliderWidth(true);
       this.slider.refresh(); // 当 DOM 结构发生变化的时候务必要调用确保滚动的效果正常
     });

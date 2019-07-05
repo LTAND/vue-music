@@ -18,6 +18,18 @@ export default {
 <style lang='stylus' scoped rel='stylesheet/stylus'>
 @import '../../common/stylus/variable'
 
+/*
+引用
+<div class="loader-wrapper" v-show="!discList.length">
+  <loading></loading>
+</div>
+.loader-wrapper
+  position: absolute
+  width: 100%
+  top: 50%
+  transform: translateY(-50%) // 垂直居中对齐
+*/
+
 .loading
   text-align center
   img
