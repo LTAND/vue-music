@@ -1,0 +1,44 @@
+1.vue新建项目
+2.添加包
+npm install fastclick babel-polyfill babel-runtime -D
+fastclick  移动设备上的浏览器默认会在用户点击屏幕大约延迟300毫秒后才会触发点击事件，这是为了检查用户是否在做双击。
+babel-polyfill 是为了使用es6的API,例如，Iterator、Generator、Set、Maps、Proxy、Reflect、Symbol、Promise 等全局对象，以及一些定义在全局对象上的方法（比如 Object.assign）都不会转译。
+babel-runtime  是为了减少重复代码而生的。babel-runtime插件能够将这些工具函数的代码转换成require语句，指向为对babel-runtime的引用。
+
+在mian.js编写
+import 'babel-polyfill'
+import fastclick from 'fastclick'
+fastclick.attach(document.body)
+
+3.添加stylus
+npm install stylus-loader css-loader style-loader --save-dev
+build/webpack.base.conf.js 文件，并在其中的rules中写入配置
+{
+  test:/\.styl$/,
+  loader:'style-loader!css-loader!stylus-loader'
+}
+4.读取路径设置
+resolve: {
+  extensions: ['.js', '.vue', '.json'],
+  alias: {
+    'src': resolve('src'),
+    'common': resolve('src/common'),
+    'components': resolve('src/components')
+  }
+}
+
+
+
+
+MP3接口
+http:/ /tsmusic24.tc.QQ.com/{音乐ID}.mp3
+http:/ /stream.qqmusic.tc.qq.com/{音乐ID}.mp3
+http:/ /stream{1-30都可以}.qqmusic.qq.com/{音乐ID}.mp3
+http:/ /tsmusic128.tc.qq.com/{音乐ID+30000000}.mp3 （请计算出结果）
+QQ音乐高品质ogg
+http:/ /tsmusic128.tc.qq.com/{音乐ID+40000000}.ogg （请计算出结果）
+M4A接口
+http:/ /tsmusic24.tc.qq.com/{音乐ID}.m4a
+http:/ /thirdparty.gtimg.com/{音乐ID}.m4a?fromtag=38
+http:/ /thirdparty.gtimg.com/C100{音乐MID}.m4a?fromtag=38
+http:/ /cc.stream.qqmusic.qq.com/C200{音乐MID}.m4a?vkey={VKEY的值}&guid=1830679348

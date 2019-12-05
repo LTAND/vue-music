@@ -1,0 +1,1 @@
+确定state的基础数据,然后getter是根据基础数据生成复杂的数据，创建mutations修改数据
