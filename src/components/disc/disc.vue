@@ -14,44 +14,47 @@ import { mapGetters } from 'vuex'
 import { getSongList } from 'api/recommend'
 import { ERR_OK } from 'api/config'
 import { createSong } from 'common/js/song.js'
-
+import {getSongVkey} from "api/song";
 export default {
   data () {
     return {
       songs: []
     };
   },
-  created(){
+  created() {
     this._getSongList()
   },
   components: {
     MusicList
   },
   computed: {
-    title(){
+    title() {
       return this.disc.dissname
     },
-    bgImage(){
+    bgImage() {
       return this.disc.imgurl
     },
     ...mapGetters([
       'disc'
-      ])
+    ])
   },
   methods: {
-    _getSongList(){
-      getSongList(this.disc.dissid).then((res)=>{
-        if(res.code === ERR_OK){
+    _getSongList() {
+      getSongList(this.disc.dissid).then((res) => {
+        if (res.code === ERR_OK) {
           this.songs = this._normalizSongs(res.cdlist[0].songlist)
         }
       })
     },
-    _normalizSongs(list){
+    _normalizSongs(list) {
       let ret = []
       list.forEach(musicData => {
-        if(musicData.songid && musicData.albummid){
-         ret.push(createSong(musicData))
-        }
+        console.log(musicData)
+        getSongVkey(musicData.songmid).then(res => {
+          if (musicData.songid && musicData.albummid) {
+            ret.push(createSong(musicData, res.data.items[0].vkey))
+          }
+        })
       });
       return ret
     }

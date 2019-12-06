@@ -11,7 +11,8 @@ import { mapGetters } from 'vuex'
 import MusicList from 'components/music-list/music-list'
 import { getMusicList } from 'api/rank'
 import { ERR_OK } from 'api/config'
-import { createSong } from 'common/js/song.js' 
+import {getSongVkey} from "api/song";
+import { createSong } from 'common/js/song.js'
 export default {
   data () {
     return {
@@ -19,18 +20,18 @@ export default {
       rank: true
     };
   },
-  created(){
+  created() {
     this._getMusicList()
-  }, 
+  },
   components: {
     MusicList
   },
   computed: {
-    title(){
+    title() {
       return this.topList.topTitle
     },
-    bgImage(){
-      if(this.songs.length){
+    bgImage() {
+      if (this.songs.length) {
         return this.songs[0].img
       }
       return ''
@@ -40,10 +41,10 @@ export default {
     ])
   },
   methods: {
-    _getMusicList(){
-      if(!this.topList.id){
+    _getMusicList() {
+      if (!this.topList.id) {
         this.$router.push('/rank')
-        return 
+        return
       }
       getMusicList(this.topList.id).then((res) => {
         if (res.code === ERR_OK) {
@@ -51,15 +52,17 @@ export default {
         }
       })
     },
-    _normalizeSongs(list){
-      let ret = []
+    _normalizeSongs(list) {
+      let ret = [];
       list.forEach(item => {
-        const musicData  = item.data
-        if(musicData.songid && musicData.albummid){
-          ret.push(createSong(musicData))
-        }
+        let musicData = item.data;
+        getSongVkey(musicData.songmid).then(res => {
+          if (musicData.songid && musicData.albummid) {
+            ret.push(createSong(musicData, res.data.items[0].vkey)) // 格式化每一首歌曲
+          }
+        })
       });
-      return ret
+      return ret;
     }
   }
 }

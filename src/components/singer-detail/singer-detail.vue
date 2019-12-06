@@ -9,6 +9,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { getSingerDetail } from "api/singer";
+import {getSongVkey} from "api/song";
 import { ERR_OK } from "api/config";
 import { createSong } from "common/js/song";
 import MusicList from "components/music-list/music-list";
@@ -53,9 +54,13 @@ export default {
       let ret = [];
       list.forEach(item => {
         let { musicData } = item;
-        if (musicData.songid && musicData.albummid) {
-          ret.push(createSong(musicData)); // 格式化每一首歌曲
-        }
+        getSongVkey(musicData.songmid).then(res => {
+          let vkey = res.data.items[0].vkey
+          console.log(vkey)
+          if (musicData.songid && musicData.albummid) {
+            ret.push(createSong(musicData, vkey)) // 格式化每一首歌曲
+          }
+        })
       });
       return ret;
     }

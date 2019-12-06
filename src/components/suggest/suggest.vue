@@ -29,6 +29,7 @@
 import { search } from "api/search.js";
 import { ERR_OK } from "api/config.js";
 import { createSong } from "common/js/song";
+import { getSongVkey } from "api/song";
 import Singer from "common/js/singer";
 import { mapActions, mapMutations, mapGetters } from "vuex";
 import Loading from "base/loading/loading";
@@ -52,8 +53,8 @@ export default {
       page: 1,
       result: [],
       hasMore: true,
-      pullup:true,        // 派发scrollToEnd事件
-      beforeScroll: true  // 派发beforeScroll事件
+      pullup: true, // 派发scrollToEnd事件
+      beforeScroll: true // 派发beforeScroll事件
     };
   },
   components: {
@@ -74,7 +75,7 @@ export default {
       } else {
         this.insertSong(item);
       }
-      this.$emit('select',item) // 派发处理搜素历史
+      this.$emit('select', item) // 派发处理搜素历史
     },
     nameText(item) {
       if (item.type === TYPE_SINGER) {
@@ -111,15 +112,13 @@ export default {
         }
       });
     },
-    listScroll(){
+    listScroll() {
       this.$emit("listScroll")
     },
     _checkMore(data) {
       const song = data.song;
       const isTotalEnd =
-        song["totalnum"] < song["curnum"] + song["curpage"] * perpage
-          ? true
-          : false;
+        song["totalnum"] < song["curnum"] + song["curpage"] * perpage;
       if (!song.list.length || isTotalEnd) {
         return false;
       } else {
@@ -142,8 +141,15 @@ export default {
       // 格式化
       let ret = [];
       list.forEach(musicData => {
+        // console.log(musicData)
+        // getSongVkey(musicData.songmid).then(res => {
+        //   if (musicData.songid && musicData.albummid) {
+        //     ret.push(createSong(musicData, res.data.items[0].vkey))
+        //   }
+        // })
+        let vkey = "8EDA36E324125A6A4CF07D3C7DB251BD5582FFD28EF436D6F51EB252F73678E773A0C4174C783FCBFB69012A6F7A67B905F03DFC166EB963"
         if (musicData.songid && musicData.albummid) {
-          ret.push(createSong(musicData));
+          ret.push(createSong(musicData, vkey))
         }
       });
       return ret;

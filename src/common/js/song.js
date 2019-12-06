@@ -39,7 +39,7 @@ export default class Song {
   }
 }
 
-export function createSong(musicData) {
+export function createSong(musicData, vkey) {
   // 创建单个歌曲数据对象
   return new Song({
     id: musicData.songid,
@@ -51,14 +51,12 @@ export function createSong(musicData) {
     // C400002KcRGW4WFSys
     // C400002GrJ771EmliH
     img: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
+    url: `http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400${musicData.songmid}.m4a?guid=2095717240&vkey=${vkey}&uin=0&fromtag=38`
     // url: `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46`// 旧qq音乐的播放源
     // url: `https://api.bzqll.com/music/tencent/url?id=${musicData.songmid}&key=579621905&br=320`
-    // url: `https://dl.stream.qqmusic.qq.com/M500002KcRGW4WFSys.mp3?vkey=FEDE7DFD5274174AA34294FE74190360CBC7F0AAC7A0365300927B7EC1D3DFCEA730B2896AF09110B6727612056A3EBAB8DEB8968E34EE1F&guid=1551429817&uin=0&fromtag=53`
+    // url: `https://dl.stream.qqmusic.qq.com/M500${musicData.songmid}.mp3?vkey=FEDE7DFD5274174AA34294FE74190360CBC7F0AAC7A0365300927B7EC1D3DFCEA730B2896AF09110B6727612056A3EBAB8DEB8968E34EE1F&guid=1551429817&uin=0&fromtag=53`
     // url: `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46`
     // url: `http://61.144.207.146:8081/b8154d3d-4166-4561-ad8d-7188a96eb195/4001/bc/de/bcde835d-f360-4f88-882d-64b2b835f617/kfid/14786576/C400${musicData.songmid}.m4a?guid=2962606080&vkey=94CDDF2F0C265782616E208177B31A070243A56317B1C0A41D1BC82D8483E06BFE2557D14093AD6E3DE736F1D9AC0FD0284A317B048AD202&uin=0&fromtag=3&r=04613806494510175`
-    // http://sioxas.github.io/#/rank/4
-    url: `http://aqqmusic.tc.qq.com/amobile.music.tc.qq.com/C400${musicData.albummid}.m4a?guid=3663221560&vkey=0C281E42631F9438B5B4A2F35AC55B87422ED623531363DC3E5FEE47BCE5F92C2A3FE7B1B6620AE6173CD98953C7FF62AEBF65B4F9DE9CFE&uin=0&fromtag=38`
-  
   })
 }
 

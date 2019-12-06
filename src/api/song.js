@@ -23,24 +23,21 @@ export function getLyric(mid) {
   })
 }
 
-export function getSongVkey(songmid) { // 获取歌曲的vkey
-  const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
+// 获取vkey
+export const getSongVkey = (songmid) => {
+  const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?'
   const data = Object.assign({}, {
-    g_tk: 195219765,
-    jsonpCallback: 'MusicJsonCallback004680169373158849',
-    loginUin: 1297716249, // 可以传空值
-    hostUin: 0,
-    format: 'json',
-    notice: 0,
+    callback: 'musicJsonCallback',
+    loginUin: 3051522991, // 可以传空值
+    format: 'jsonp',
     platform: 'yqq',
     needNewCode: 0,
     cid: 205361747,
-    callback: 'MusicJsonCallback004680169373158849',
-    uin: 1297716249, // 可以传空值
-    songmid: `${songmid}`,
-    filename: `C400${songmid}.m4a`,
-    guid: 4208080920
+    uin: 0, // 可以传空值
+    guid: 2095717240,
     // guid 随机变化 Math.round(2147483647 * Math.random()) * ((new Date()).getUTCMilliseconds()) % 1e10
+    songmid: songmid,
+    filename: `C400${songmid}.m4a`
   })
 
   return jsonp(url, data)
